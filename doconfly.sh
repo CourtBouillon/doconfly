@@ -32,7 +32,7 @@ sphinx_build() {
 }
 
 create_js_file() {
-    \cd $project_clone
+    \cd $project_path
     content="
         window.onload = function(){
             document.getElementsByClassName('wy-nav-side')[0].innerHTML +=
@@ -49,6 +49,7 @@ create_js_file() {
 
 
 generate_doc() {
+    \cd $project_clone
     \sed -i "s,version = .*,version = $2," docs/conf.py
     \echo "html_js_files = ['../../versions_list.js']" >> docs/conf.py
     install_doc_requirements
@@ -80,9 +81,8 @@ get_project_name $1
 get_ref_type $2
 
 project_path="/home/lameche/Projets/$project_name"
-project_clone="$project_path"
 #project_path="/var/www/$project_name"
-#project_clone="$project_path/$project_name"
+project_clone="$project_path/$project_name"
 
 config_$project_name
 main
