@@ -33,13 +33,20 @@ sphinx_build() {
 
 create_js_file() {
     \cd $project_path
+    versions=""
+    for doc in *
+    do
+        if ! [[ $doc == "$project_name" || $doc == "versions_list.js" ]]
+        then
+            versions=$versions" <li><a href=\"$doc\">$doc</a></li>"
+        fi
+    done
     content="
         window.onload = function(){
             document.getElementsByClassName('wy-nav-side')[0].innerHTML +=
             '<p> \
               <ul> \
-               <li><a href=\"\">latest</a></li> \
-               <li><a href=\"\">stable</a></li> \
+              $versions \
               </ul> \
              </p>'
         }
