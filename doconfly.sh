@@ -39,7 +39,7 @@ generate_doc() {
     \git checkout docs/conf.py
 }
 
-mai() {
+main() {
     \cd $project_clone
     \git pull origin master
     if [[ $ref_type == "heads" ]]
