@@ -23,7 +23,6 @@ install_doc_requirements() {
     \cd $project_clone
     \python -m venv .venv
     \git checkout master
-    echo $PWD
     .venv/bin/pip install .[doc]
 }
 
@@ -32,11 +31,30 @@ sphinx_build() {
     .venv/bin/sphinx-build docs $1
 }
 
+create_js_file() {
+    \cd $project_clone
+    content="
+        window.onload = function(){
+            document.getElementsByClassName('wy-nav-side')[0].innerHTML +=
+            '<p> \
+              <ul> \
+               <li><a href=\"\">latest</a></li> \
+               <li><a href=\"\">stable</a></li> \
+              </ul> \
+             </p>'
+        }
+    "
+    \echo "$content" > versions_list.js
+}
+
+
 generate_doc() {
     \sed -i "s,version = .*,version = $2," docs/conf.py
+    \echo "html_js_files = ['../../versions_list.js']" >> docs/conf.py
     install_doc_requirements
     sphinx_build $1
     \git checkout docs/conf.py
+    create_js_file
 }
 
 main() {
@@ -53,8 +71,8 @@ main() {
         doc_directory="$project_path/stable"
         generate_doc $doc_directory "'stable'"
     else
-        echo "This is not a push on master nor a tag"
-        exit 1
+        \echo "This is not a push on master nor a tag"
+        \exit 1
     fi
 }
 
