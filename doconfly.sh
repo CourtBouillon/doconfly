@@ -44,16 +44,13 @@ create_js_file() {
     content="
         window.onload = function(){
             document.getElementsByClassName('wy-nav-side')[0].innerHTML +=
-            '<p> \
-              <ul> \
+            '<ul> \
               $versions \
-              </ul> \
-             </p>'
+              </ul>';
         }
     "
     \echo "$content" > versions_list.js
 }
-
 
 generate_doc() {
     \cd $project_clone
