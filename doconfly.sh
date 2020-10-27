@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-config_tinycss2() {
-    number_versions=0
+avoid_versions_tinycss2() {
+    avoided_versions="v1.0.0 v1.0.1"
 }
 
 get_project_name() {
@@ -56,6 +56,7 @@ generate_doc() {
     \cd $project_clone
     \sed -i "s,version = .*,version = $2," docs/conf.py
     \echo "html_js_files = ['../../versions_list.js']" >> docs/conf.py
+    \echo "html_css_files = ['https://www.courtbouillon.org/static/docs.css']" >> docs/conf.py
     install_doc_requirements
     sphinx_build $1
     \git checkout docs/conf.py
@@ -88,5 +89,5 @@ project_path="/home/lameche/Projets/$project_name"
 #project_path="/var/www/$project_name"
 project_clone="$project_path/$project_name"
 
-config_$project_name
+avoid_versions_$project_name
 main
