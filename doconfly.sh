@@ -115,8 +115,8 @@ avoid_versions_$project_name
 
 documentation="/tmp"
 github_repository=$1
-project_clone="$project_path/$project_name"
 project_path="$documentation/$project_name"
+project_clone="$project_path/$project_name"
 
 make_directory $project_name
 
