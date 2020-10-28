@@ -3,7 +3,7 @@
 set -euo pipefail
 
 avoid_versions_tinycss2() {
-    avoided_versions="v1.0.0 v1.0.1"
+    avoided_versions="v0.1 v0.2 v0.3 v0.4 v0.5 v0.6.0 v0.6.1"
 }
 
 get_project_name() {
@@ -54,13 +54,29 @@ create_js_file() {
 
 generate_doc() {
     \cd $project_clone
-    \sed -i "s,version = .*,version = $2," docs/conf.py
+    \sed -i "s,version = .*,version = \"$2\"," docs/conf.py
     \echo "html_js_files = ['../../versions_list.js']" >> docs/conf.py
     \echo "html_css_files = ['https://www.courtbouillon.org/static/docs.css']" >> docs/conf.py
     install_doc_requirements
     sphinx_build $1
     \git checkout docs/conf.py
     create_js_file
+}
+
+build_doc_versions() {
+    \cd $project_clone
+    for tag in $(git for-each-ref refs/tags --format='%(refname)')
+    do
+        version=${tag##*/}
+        if [[ ! $avoided_versions =~ "$version" ]]
+        then
+            if [ ! -d "$version" ]
+            then
+                doc_directory="$project_path/$version"
+                generate_doc $doc_directory $version
+            fi
+        fi
+    done
 }
 
 main() {
@@ -80,6 +96,7 @@ main() {
         \echo "This is not a push on master nor a tag"
         \exit 1
     fi
+    build_doc_versions
 }
 
 get_project_name $1
