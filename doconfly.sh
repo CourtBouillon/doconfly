@@ -79,6 +79,16 @@ build_doc_versions() {
     done
 }
 
+make_directory() {
+    if [ ! -d "$documentation/$1" ]
+    then
+        \cd "$documentation"
+        \mkdir "$project_name"
+        \cd "$project_name"
+        \git clone "git@github.com:$github_repository.git"
+    fi
+}
+
 main() {
     \cd $project_clone
     \git pull origin master
@@ -101,10 +111,13 @@ main() {
 
 get_project_name $1
 get_ref_type $2
-
-project_path="/home/lameche/Projets/$project_name"
-#project_path="/var/www/$project_name"
-project_clone="$project_path/$project_name"
-
 avoid_versions_$project_name
+
+documentation="/tmp"
+github_repository=$1
+project_clone="$project_path/$project_name"
+project_path="$documentation/$project_name"
+
+make_directory $project_name
+
 main
