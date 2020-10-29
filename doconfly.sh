@@ -56,6 +56,8 @@ create_js_file() {
             '<ul id="versions"> \
               $versions \
               </ul>';
+            current_version = window.location.href.split('/').reverse()[1];
+            document.querySelector(\`#versions a[href\$=\"\${current_version}\"]\`).parentElement.classList.add('current');
         }
     "
     \echo "$content" > versions_list.js
