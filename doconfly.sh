@@ -30,7 +30,7 @@ get_ref_type() {
 
 install_doc_requirements() {
     \cd $project_clone
-    \python -m venv .venv
+    \python3 -m venv .venv
     \git checkout master
     .venv/bin/pip install .[doc]
 }
