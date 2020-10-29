@@ -32,6 +32,7 @@ install_doc_requirements() {
     \cd $project_clone
     \python3 -m venv .venv
     \git checkout master
+    .venv/bin/pip install --upgrade pip setuptools
     .venv/bin/pip install .[doc]
 }
 
