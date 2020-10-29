@@ -68,7 +68,6 @@ generate_doc() {
     \cd $project_clone
     \sed -i "s,version = .*,version = \"$2\"," docs/conf.py
     \echo "html_js_files = ['../../versions_list.js']" >> docs/conf.py
-    \echo "html_css_files = ['https://www.courtbouillon.org/static/docs.css']" >> docs/conf.py
     install_doc_requirements
     sphinx_build $1
     \git checkout docs/conf.py
