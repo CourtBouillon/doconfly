@@ -81,7 +81,7 @@ build_doc_versions() {
         version=${tag##*/}
         if [[ ! $avoided_versions =~ "$version" ]]
         then
-            if [ ! -d "$version" ]
+            if [ ! -d "$documentation/$project_name/$version" ]
             then
                 doc_directory="$project_path/$version"
                 generate_doc $doc_directory $version
