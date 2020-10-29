@@ -1,5 +1,10 @@
 #! /usr/bin/env bash
 
+# $1 GITHUB_REPOSITORY
+# $2 GITHUB_REF
+# $3 documentation path
+# $4 documentation base url
+
 set -euo pipefail
 
 avoid_versions_tinycss2() {
@@ -38,7 +43,7 @@ create_js_file() {
     do
         if ! [[ $doc == "$project_name" || $doc == "versions_list.js" ]]
         then
-            versions=$versions" <li><a href=\"$doc\">$doc</a></li>"
+            versions=$versions" <li><a href=\"$documentation_base_url/$project_name/$doc\">$doc</a></li>"
         fi
     done
     content="
@@ -113,7 +118,8 @@ get_project_name $1
 get_ref_type $2
 avoid_versions_$project_name
 
-documentation="/tmp"
+documentation=$3
+documentation_base_url=$4
 github_repository=$1
 project_path="$documentation/$project_name"
 project_clone="$project_path/$project_name"
