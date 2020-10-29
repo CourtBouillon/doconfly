@@ -11,6 +11,10 @@ avoid_versions_tinycss2() {
     avoided_versions="v0.1 v0.2 v0.3 v0.4 v0.5 v0.6.0 v0.6.1"
 }
 
+avoid_versions_cssselect2() {
+    avoided_versions="0.1 0.2.0 0.2.1 0.2.2"
+}
+
 get_project_name() {
     # GitHub gives org/project_name
     project_name=${1##*/}
@@ -49,7 +53,7 @@ create_js_file() {
     content="
         window.onload = function(){
             document.getElementsByClassName('wy-nav-side')[0].innerHTML +=
-            '<ul> \
+            '<ul id="versions"> \
               $versions \
               </ul>';
         }
