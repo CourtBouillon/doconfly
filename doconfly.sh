@@ -15,6 +15,10 @@ avoid_versions_cssselect2() {
     avoided_versions="0.1 0.2.0 0.2.1 0.2.2"
 }
 
+avoid_versions_pydyf() {
+    avoided_versions=""
+}
+
 get_project_name() {
     # GitHub gives org/project_name
     project_name=${1##*/}
