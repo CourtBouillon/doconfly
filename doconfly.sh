@@ -121,6 +121,7 @@ make_directory() {
 
 main() {
     \cd $project_clone
+    \git checkout docs/conf.py
     \git pull origin master
     if [[ $ref_type == "heads" ]]
     then
