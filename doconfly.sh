@@ -31,6 +31,7 @@ avoid_versions_WeasyPrint() {
 get_project_name() {
     # GitHub gives org/project_name
     project_name=${1##*/}
+    project_name=${project_name,,}
 }
 
 get_ref_type() {
