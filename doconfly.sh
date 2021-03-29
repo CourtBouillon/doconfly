@@ -45,7 +45,12 @@ get_ref_type() {
 install_doc_requirements() {
     \cd $project_clone
     \python3 -m venv .venv
-    \git checkout master
+    if ! [[ $2 == "stable" || $2 == "latest" ]]
+    then
+        \git checkout $2
+    else
+        \git checkout master
+    fi
     .venv/bin/pip install --upgrade pip setuptools
     .venv/bin/pip install .[doc]
 }
@@ -82,7 +87,7 @@ generate_doc() {
     \cd $project_clone
     \sed -i "s,version = .*,version = \"$2\"," docs/conf.py
     \echo "html_js_files = ['../../versions_list.js']" >> docs/conf.py
-    install_doc_requirements
+    install_doc_requirements $2
     sphinx_build $1
     \git checkout docs/conf.py
     create_js_file
