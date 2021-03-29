@@ -105,12 +105,12 @@ build_doc_versions() {
 }
 
 make_directory() {
-    if [ ! -d "$documentation/$1" ]
+    if [ ! -d "$documentation/$project_name" ]
     then
         \cd "$documentation"
         \mkdir "$project_name"
         \cd "$project_name"
-        \git clone "git@github.com:$github_repository.git"
+        \git clone "git@github.com:$github_repository.git" "$project_name"
     fi
 }
 
