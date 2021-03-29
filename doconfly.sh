@@ -85,11 +85,11 @@ create_js_file() {
 
 generate_doc() {
     \cd $project_clone
+    \git checkout docs/conf.py
+    install_doc_requirements $2
     \sed -i "s,version = .*,version = \"$2\"," docs/conf.py
     \echo "html_js_files = ['../../versions_list.js']" >> docs/conf.py
-    install_doc_requirements $2
     sphinx_build $1
-    \git checkout docs/conf.py
     create_js_file
 }
 
