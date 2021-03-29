@@ -45,7 +45,7 @@ get_ref_type() {
 install_doc_requirements() {
     \cd $project_clone
     \python3 -m venv .venv
-    if ! [[ $1 == "stable" || $1 == "latest" ]]
+    if ! [[ $1 == "'stable'" || $1 == "'latest'" ]]
     then
         \git checkout $1
     else
