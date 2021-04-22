@@ -47,7 +47,7 @@ install_doc_requirements() {
     \python3 -m venv .venv
     if ! [[ $1 == "'stable'" || $1 == "'latest'" ]]
     then
-        \git checkout $1
+        \git checkout "$tag"
     else
         \git checkout master
     fi
