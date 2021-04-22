@@ -122,7 +122,7 @@ make_directory() {
 main() {
     \cd $project_clone
     \git checkout docs/conf.py
-    \git pull origin master
+    \git pull origin master -t
     if [[ $ref_type == "heads" ]]
     then
         doc_directory="$project_path/latest"
