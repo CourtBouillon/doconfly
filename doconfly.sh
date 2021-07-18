@@ -45,11 +45,14 @@ get_ref_type() {
 install_doc_requirements() {
     \cd $project_clone
     \python3 -m venv .venv
-    if ! [[ $1 == "'stable'" || $1 == "'latest'" ]]
+    if [[ $1 == "'stable'" ]]
     then
-        \git checkout "$tag"
-    else
+        \git checkout `git tag | sort -r --version-sort | grep -E -v '(a|b|rc)[0-9]$' | head -n 1`
+    elif [[ $1 == "'latest'" ]]
+    then
         \git checkout master
+    else
+        \git checkout "$tag"
     fi
     .venv/bin/pip install --upgrade pip setuptools
     .venv/bin/pip install .[doc]
