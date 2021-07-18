@@ -75,7 +75,9 @@ create_js_file() {
             document.getElementsByClassName('wy-nav-side')[0].innerHTML +=
             '<ul id="versions"> \
               $versions \
-              </ul>';
+            </ul>';
+            document.getElementsByTagName('head')[0].innerHTML +=
+            '<link rel="stylesheet" href="https://www.courtbouillon.org/static/versions.css" type="text/css" />';
             current_version = window.location.href.split('/').reverse()[1];
             document.querySelector(\`#versions a[href\$=\"\${current_version}\"]\`).parentElement.classList.add('current');
         }
