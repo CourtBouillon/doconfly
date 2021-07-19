@@ -42,12 +42,18 @@ get_ref_type() {
     tag=${without_head#*/}
 }
 
+get_stable_version() {
+    \cd $project_clone
+    echo `git tag | sort -r --version-sort | grep -E -v '(a|b|rc)[0-9]$' | head -n 1`
+    \cd -
+}
+
 install_doc_requirements() {
     \cd $project_clone
     \python3 -m venv .venv
     if [[ $1 == "'stable'" ]]
     then
-        \git checkout `git tag | sort -r --version-sort | grep -E -v '(a|b|rc)[0-9]$' | head -n 1`
+        \git checkout `get_stable_version`
     elif [[ $1 == "'latest'" ]]
     then
         \git checkout master
@@ -70,7 +76,14 @@ create_js_file() {
     do
         if ! [[ $doc == "$project_name" || $doc == "versions_list.js" ]]
         then
-            versions=$versions" <li><a href=\"$documentation_base_url/$project_name/$doc\">$doc</a></li>"
+            versions=$versions" <li><a href=\"$documentation_base_url/$project_name/$doc\">$doc"
+            if [[ $doc == "latest" ]]
+            then
+                versions=$versions" (master)"
+            elif [[ $doc == "stable" ]]
+                versions=$versions" (`get_stable_version`)"
+            fi
+            versions=$versions"</a></li>"
         fi
     done
     content="
