@@ -44,7 +44,7 @@ get_ref_type() {
 
 get_stable_version() {
     \cd $project_clone
-    echo `git tag | sort -r --version-sort | grep -E -v '(a|b|rc)[0-9]$' | head -n 1`
+    echo -n `git tag | sort -r --version-sort | grep -E -v '(a|b|rc)[0-9]$' | head -n 1 | `
     \cd -
 }
 
