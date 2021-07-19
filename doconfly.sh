@@ -44,7 +44,7 @@ get_ref_type() {
 
 get_stable_version() {
     \cd $project_clone
-    echo -n `git tag | sort -r --version-sort | grep -E -v '(a|b|rc)[0-9]$' | head -n 1`
+    echo `git tag | sort -r --version-sort | grep -E -v '(a|b|rc)[0-9]$' | head -n 1`
     \cd -
 }
 
@@ -82,7 +82,7 @@ create_js_file() {
                 versions=$versions" (master)"
             elif [[ $doc == "stable" ]]
             then
-                versions=$versions" (`get_stable_version`)"
+                versions=$versions" (`get_stable_version | tr -d '\n'`)"
             fi
             versions=$versions"</a></li>"
         fi
