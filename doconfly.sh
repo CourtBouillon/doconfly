@@ -81,6 +81,7 @@ create_js_file() {
             then
                 versions=$versions" (master)"
             elif [[ $doc == "stable" ]]
+            then
                 versions=$versions" (`get_stable_version`)"
             fi
             versions=$versions"</a></li>"
