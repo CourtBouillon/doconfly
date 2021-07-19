@@ -45,7 +45,7 @@ get_ref_type() {
 get_stable_version() {
     \cd $project_clone
     echo `git tag | sort -r --version-sort | grep -E -v '(a|b|rc)[0-9]$' | head -n 1`
-    \cd -
+    \cd - > /dev/null
 }
 
 install_doc_requirements() {
