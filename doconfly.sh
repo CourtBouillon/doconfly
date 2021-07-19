@@ -140,7 +140,6 @@ make_directory() {
 
 main() {
     \cd $project_clone
-    \git checkout master
     \git fetch
     \git reset --hard origin/master
     if [[ $ref_type == "heads" ]]
