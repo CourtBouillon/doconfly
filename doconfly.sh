@@ -20,7 +20,8 @@ avoid_versions_pydyf() {
 }
 
 avoid_versions_weasyprint() {
-    avoided_versions="v47 v46 v45 v44 v43rc2 v43rc1 v43 v0.9 v0.8 v0.7.1 v0.7
+    avoided_versions="v53.0b2 v53.0b1 v52.4 v52.3 v52.2 v52.1 v52 v51 v50 v49
+    v48 v47 v46 v45 v44 v43rc2 v43rc1 v43 v0.9 v0.8 v0.7.1 v0.7
     v0.6.1 v0.6 v0.5 v0.42.2 v0.42.1 v0.42 v0.41 v0.40 v0.4 v0.39 v0.38 v0.37
     v0.36 v0.35 v0.34 v0.33 v0.32 v0.31 v0.3.1 v0.30 v0.3 v0.29 v0.28 v0.27
     v0.26 v0.25 v0.24 v0.23 v0.22 v0.2.2 v0.21 v0.2.1 v0.20.2 v0.20.1 v0.20
