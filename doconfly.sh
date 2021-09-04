@@ -57,7 +57,7 @@ install_doc_requirements() {
         \git checkout `get_stable_version`
     elif [[ $1 == "'latest'" ]]
     then
-        \git checkout master
+        \git checkout origin/master
     else
         \git checkout "$tag"
     fi
