@@ -29,6 +29,11 @@ avoid_versions_weasyprint() {
     v0.12 v0.11 v0.10 v0.1"
 }
 
+avoid_versions_pyphen() {
+    avoided_versions="0.6 0.7 0.8 0.9 0.9.1 0.9.2 0.9.3 0.9.4 0.9.5 0.10.0
+    0.11.0"
+}
+
 get_project_name() {
     # GitHub gives org/project_name
     project_name=${1##*/}
