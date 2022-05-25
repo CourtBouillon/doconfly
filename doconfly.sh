@@ -34,6 +34,10 @@ avoid_versions_pyphen() {
     0.11.0"
 }
 
+avoid_versions_slight() {
+    avoided_versions=""
+}
+
 get_project_name() {
     # GitHub gives org/project_name
     project_name=${1##*/}
