@@ -51,7 +51,7 @@ sphinx_build() {
 create_js_file() {
     \cd $project_path
     js_versions=""
-    for doc in $(echo "latest stable $versions")
+    for doc in `echo "latest stable $versions"`
     do
         if ! [[ $doc == "$project_name" || $doc == "js_versions_list.js" ]]
         then
