@@ -7,37 +7,6 @@
 
 set -euo pipefail
 
-avoid_versions_tinycss2() {
-    avoided_versions="v0.1 v0.2 v0.3 v0.4 v0.5 v0.6.0 v0.6.1"
-}
-
-avoid_versions_cssselect2() {
-    avoided_versions="0.1 0.2.0 0.2.1 0.2.2"
-}
-
-avoid_versions_pydyf() {
-    avoided_versions=""
-}
-
-avoid_versions_weasyprint() {
-    avoided_versions="v54.1 v54.0 v54.0b1 v53.3 v53.2 v53.1 v53.0 v53.0b2 v53.0b1
-    v52.4 v52.3 v52.2 v52.1 v52 v51 v50 v49 v48 v47 v46 v45 v44 v43rc2 v43rc1 v43 v0.9 v0.8 v0.7.1 v0.7
-    v0.6.1 v0.6 v0.5 v0.42.2 v0.42.1 v0.42 v0.41 v0.40 v0.4 v0.39 v0.38 v0.37
-    v0.36 v0.35 v0.34 v0.33 v0.32 v0.31 v0.3.1 v0.30 v0.3 v0.29 v0.28 v0.27
-    v0.26 v0.25 v0.24 v0.23 v0.22 v0.2.2 v0.21 v0.2.1 v0.20.2 v0.20.1 v0.20
-    v0.2 v0.19.2 v0.19.1 v0.19 v0.18 v0.17.1 v0.17 v0.16 v0.15 v0.14 v0.13
-    v0.12 v0.11 v0.10 v0.1"
-}
-
-avoid_versions_pyphen() {
-    avoided_versions="0.6 0.7 0.8 0.9 0.9.1 0.9.2 0.9.3 0.9.4 0.9.5 0.10.0
-    0.11.0"
-}
-
-avoid_versions_slight() {
-    avoided_versions=""
-}
-
 get_project_name() {
     # GitHub gives org/project_name
     project_name=${1##*/}
@@ -54,7 +23,7 @@ get_ref_type() {
 
 get_stable_version() {
     \cd $project_clone
-    echo `git tag | sort -r --version-sort | grep -E -v '(a|b|rc)[0-9]$' | head -n 1`
+    \echo `git tag --format='%(refname)' | sed '/-/!{s/$/\.0/}' | sort -rV | sed 's/\.0$//'git tag | head -n 1`
     \cd - > /dev/null
 }
 
@@ -124,16 +93,27 @@ generate_doc() {
 
 build_doc_versions() {
     \cd $project_clone
-    for tag in $(git for-each-ref refs/tags --format='%(refname)')
+    versions=0
+    for tag in $(git tag --format='%(refname)' | sed '/-/!{s/$/\.0/}' | sort -rV | sed 's/\.0$//')
     do
         version=${tag##*/}
-        if [[ ! $avoided_versions =~ "$version" ]]
+        if [[ versions -eq 0 || $version != *@(a|b|rc)* && "${version##*.}" -ge "${last_version##*.}" ]]
         then
             if [ ! -d "$documentation/$project_name/$version" ]
             then
-                doc_directory="$project_path/$version"
-                generate_doc $doc_directory $version
+                generate_doc "$project_path/$version" $version
+                versions=$versions+1
+                if [[ $versions -ge 5 ]]
+                then
+                    break
+                fi
             fi
+        fi
+        if [[ $version == *@(a|b|rc)* ]]
+        then
+            last_version=0
+        else
+            last_version=$version
         fi
     done
 }
@@ -171,7 +151,6 @@ main() {
 
 get_project_name $1
 get_ref_type $2
-avoid_versions_$project_name
 
 documentation=$3
 documentation_base_url=$4
