@@ -23,7 +23,7 @@ get_ref_type() {
 
 get_stable_version() {
     \cd $project_clone
-    \echo `git tag --format='%(refname)' | sed '/-/!{s/$/\.0/}' | sort -rV | sed 's/\.0$//'git tag | head -n 1`
+    \echo `git tag --format='%(refname)' | sed '/-/!{s/$/\.0/}' | sort -rV | sed 's/\.0$//' | head -n 1`
     \cd - > /dev/null
 }
 
