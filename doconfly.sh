@@ -23,7 +23,7 @@ get_ref_type() {
 
 get_stable_version() {
     \cd $project_clone
-    \echo `git tag --format='%(refname)' | sed '/-/!{s/$/\.0/}' | sort -rV | sed 's/\.0$//' | head -n 1`
+    \echo `git tag | sed '/-/!{s/$/\.0/}' | sort -rV | sed 's/\.0$//' | head -n 1`
     \cd - > /dev/null
 }
 
@@ -50,27 +50,27 @@ sphinx_build() {
 
 create_js_file() {
     \cd $project_path
-    versions=""
-    for doc in *
+    js_versions=""
+    for doc in $(echo "latest stable $versions")
     do
-        if ! [[ $doc == "$project_name" || $doc == "versions_list.js" ]]
+        if ! [[ $doc == "$project_name" || $doc == "js_versions_list.js" ]]
         then
-            versions=$versions" <li><a href=\"$documentation_base_url/$project_name/$doc\">$doc"
+            js_versions=$js_versions" <li><a href=\"$documentation_base_url/$project_name/$doc\">$doc"
             if [[ $doc == "latest" ]]
             then
-                versions=$versions" (master)"
+                js_versions=$js_versions" (master)"
             elif [[ $doc == "stable" ]]
             then
-                versions=$versions" (`get_stable_version | tr -d '\n'`)"
+                js_versions=$js_versions" (`get_stable_version | tr -d '\n'`)"
             fi
-            versions=$versions"</a></li>"
+            js_versions=$js_versions"</a></li>"
         fi
     done
     content="
         window.onload = function(){
             document.getElementsByClassName('wy-nav-side')[0].innerHTML +=
-            '<ul id="versions"> \
-              $versions \
+            '<ul id="js_versions"> \
+              $js_versions \
             </ul>';
             document.getElementsByTagName('head')[0].innerHTML +=
             '<link rel="stylesheet" href="https://www.courtbouillon.org/static/versions.css" type="text/css" />';
@@ -93,17 +93,18 @@ generate_doc() {
 
 build_doc_versions() {
     \cd $project_clone
-    versions=0
+    versions=""
     for tag in $(git tag --format='%(refname)' | sed '/-/!{s/$/\.0/}' | sort -rV | sed 's/\.0$//')
     do
         version=${tag##*/}
-        if [[ versions -eq 0 || $version != *@(a|b|rc)* && "${version##*.}" -ge "${last_version##*.}" ]]
+        if [[ "$versions" == "" || "$version" != *@(a|b|rc)* && "${version##*.}" -ge "${last_version##*.}" ]]
         then
             if [ ! -d "$documentation/$project_name/$version" ]
             then
                 generate_doc "$project_path/$version" $version
-                versions=$versions+1
-                if [[ $versions -ge 5 ]]
+                versions="$versions $version"
+                versions_count=`echo "$versions" | wc -w`
+                if [[ versions_count -ge 5 ]]
                 then
                     break
                 fi
