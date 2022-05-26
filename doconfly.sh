@@ -93,22 +93,21 @@ generate_doc() {
 build_doc_versions() {
     \cd $project_clone
     versions=""
-    for tag in $(git tag --format='%(refname)' | sed '/-/!{s/$/\.0/}' | sort -rV | sed 's/\.0$//')
+    for version in $(git tag | sed '/-/!{s/$/\.0/}' | sort -rV | sed 's/\.0$//')
     do
-        version=${tag##*/}
         if [[ "$versions" == "" || "$version" != *@(a|b|rc)* && "${version##*.}" -ge "${last_version##*.}" ]]
         then
             if [ ! -d "$documentation/$project_name/$version" ]
             then
                 generate_doc "$project_path/$version" $version
-                versions="$versions $version"
-                versions_count=`echo "$versions" | wc -w`
-                if [[ versions_count -ge 5 ]]
-                then
-                    break
-                fi
             fi
-        fi
+            versions="$versions $version"
+            versions_count=`echo "$versions" | wc -w`
+            if [[ versions_count -ge 5 ]]
+            then
+                break
+            fi
+    fi
         if [[ $version == *@(a|b|rc)* ]]
         then
             last_version=0
