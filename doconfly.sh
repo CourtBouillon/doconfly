@@ -88,7 +88,6 @@ generate_doc() {
     \sed -i "s,version = .*,version = \"$2\"," docs/conf.py
     \echo "html_js_files = ['../../versions_list.js']" >> docs/conf.py
     sphinx_build $1
-    create_js_file
 }
 
 build_doc_versions() {
@@ -148,6 +147,7 @@ main() {
         \exit 1
     fi
     build_doc_versions
+    create_js_file
 }
 
 get_project_name $1
