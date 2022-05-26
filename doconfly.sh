@@ -69,7 +69,7 @@ create_js_file() {
     content="
         window.onload = function(){
             document.getElementsByClassName('wy-nav-side')[0].innerHTML +=
-            '<ul id="js_versions"> \
+            '<ul id="versions"> \
               $js_versions \
             </ul>';
             document.getElementsByTagName('head')[0].innerHTML +=
