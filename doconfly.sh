@@ -95,7 +95,7 @@ build_doc_versions() {
     versions=""
     for version in $(git tag | sed '/-/!{s/$/\.0/}' | sort -rV | sed 's/\.0$//')
     do
-        if [[ "$versions" == "" || "$version" != *@(a|b|rc)* && "${version##*.}" -ge "${last_version##*.}" ]]
+        if [[ "$versions" == "" || "$version" != *@(a|b|rc)* && version -ge "$last_version" ]]
         then
             if [ ! -d "$documentation/$project_name/$version" ]
             then
