@@ -35,7 +35,7 @@ install_doc_requirements() {
         \git checkout `get_stable_version`
     elif [[ $1 == "'latest'" ]]
     then
-        \git checkout origin/master
+        \git checkout origin/main
     else
         \git checkout "$tag"
     fi
@@ -130,7 +130,7 @@ make_directory() {
 main() {
     \cd $project_clone
     \git fetch
-    \git reset --hard origin/master
+    \git reset --hard origin/main
     if [[ $ref_type == "heads" ]]
     then
         doc_directory="$project_path/latest"
