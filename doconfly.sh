@@ -14,7 +14,7 @@ get_project_name() {
 }
 
 get_ref_type() {
-    # GitHub gives refs/heads/master (for a branch)
+    # GitHub gives refs/heads/main (for a branch)
     # or refs/tags/v51 (for a tag)
     without_head=${1#*/}
     ref_type=${without_head%/*}
@@ -58,7 +58,7 @@ create_js_file() {
             js_versions=$js_versions" <li><a href=\"$documentation_base_url/$project_name/$doc\">$doc"
             if [[ $doc == "latest" ]]
             then
-                js_versions=$js_versions" (master)"
+                js_versions=$js_versions" (main)"
             elif [[ $doc == "stable" ]]
             then
                 js_versions=$js_versions" (`get_stable_version | tr -d '\n'`)"
@@ -142,7 +142,7 @@ main() {
         doc_directory="$project_path/stable"
         generate_doc $doc_directory "'stable'"
     else
-        \echo "This is not a push on master nor a tag"
+        \echo "This is not a push on main nor a tag"
         \exit 1
     fi
     build_doc_versions
