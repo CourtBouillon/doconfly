@@ -68,7 +68,7 @@ create_js_file() {
     done
     content="
         window.onload = function(){
-            document.getElementsByClassName('wy-nav-side')[0].innerHTML +=
+            document.querySelector('.wy-nav-side, .sidebar-sticky').innerHTML +=
             '<ul id="versions"> \
               $js_versions \
             </ul>';
