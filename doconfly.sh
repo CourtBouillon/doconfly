@@ -122,7 +122,7 @@ make_directory() {
         \cd "$documentation"
         \mkdir "$project_name"
         \cd "$project_name"
-        \git clone "git@github.com:$github_repository.git" "$project_name"
+        \git clone "https://github.com:$github_repository.git" "$project_name"
     fi
 }
 
