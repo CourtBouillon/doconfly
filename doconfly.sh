@@ -3,7 +3,6 @@
 # $1 GITHUB_REPOSITORY
 # $2 GITHUB_REF
 # $3 documentation path
-# $4 documentation base url
 
 set -euo pipefail
 
@@ -55,7 +54,7 @@ create_js_file() {
     do
         if ! [[ $doc == "$project_name" || $doc == "js_versions_list.js" ]]
         then
-            js_versions=$js_versions" <li><a href=\"$documentation_base_url/$project_name/$doc\">$doc"
+            js_versions=$js_versions" <li><a href=\"/$project_name/$doc\">$doc"
             if [[ $doc == "latest" ]]
             then
                 js_versions=$js_versions" (main)"
@@ -123,7 +122,7 @@ make_directory() {
         \cd "$documentation"
         \mkdir "$project_name"
         \cd "$project_name"
-        \git clone "git@github.com:$github_repository.git" "$project_name"
+        \git clone "https://github.com:$github_repository.git" "$project_name"
     fi
 }
 
@@ -153,7 +152,6 @@ get_project_name $1
 get_ref_type $2
 
 documentation=$3
-documentation_base_url=$4
 github_repository=$1
 project_path="$documentation/$project_name"
 project_clone="$project_path/$project_name"
