@@ -20,14 +20,8 @@ def git(*args):
     return stdout.decode().strip().split('\n')
 
 
-def generate_doc(version_path, version, label):
-    configuration = Path('docs/conf.py')
-    git('restore', configuration)
-    git('reset', '--hard', version)
-    run(('.venv/bin/pip', 'install', '.[doc]'), check=True)
-    with configuration.open('a') as fd:
-        fd.write(f'\nversion = "{label}"\nhtml_js_files = ["../../versions_list.js"]')
-    run(('.venv/bin/sphinx-build', 'docs', version_path), check=True)
+def venv(*args):
+    run((f'.venv/bin/{args[0]}', *args[1:]), check=True)
 
 
 def app(environ, start_response):
@@ -49,10 +43,9 @@ def app(environ, start_response):
     # Fetch changes and create virtual environment.
     chdir(repository_path)
     git('fetch')
-    venv = Path('.venv')
-    if not venv.exists():
-        run(('python3', '-m', 'venv', venv), check=True)
-    run(('.venv/bin/pip', 'install', '--upgrade', 'pip'), check=True)
+    if not Path('.venv').exists():
+        run(('python3', '-m', 'venv', '.venv'), check=True)
+    venv('pip', 'install', '--upgrade', 'pip')
 
     # Create JavaScript file adding latest minor versions in menu.
     last_minor = None
@@ -71,7 +64,10 @@ def app(environ, start_response):
         html += f'<li><a href="/{repository}/{page}">{version}{extra}</a></li>'
         version_path = doc_path / version
         if not version_path.exists() or (version == 'latest' and ref_name == 'main'):
-            generate_doc(version_path, ref_name, version)
+            git('reset', '--hard', ref_name)
+            venv('pip', 'install', '.[doc]')
+            js = 'html_js_files=/versions_list.js'
+            venv('sphinx-build', 'docs', version_path, '--define', js)
         if stable:
             stable_version = version
             stable_link = doc_path / 'stable'
