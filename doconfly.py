@@ -36,9 +36,9 @@ def app(environ, start_response):
 
     # Create repository folder.
     chdir(doc_path)
-    repository_path = doc_path / repository
+    repository_path = doc_path / f'.{repository}'
     if not repository_path.exists():
-        git('clone', f'https://github.com/{group}/{repository}.git')
+        git('clone', f'https://github.com/{group}/{repository}.git', repository_path)
 
     # Fetch changes and create virtual environment.
     chdir(repository_path)
