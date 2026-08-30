@@ -63,7 +63,8 @@ def app(environ, start_response):
         extra = ' (main)' if version == 'latest' else ' (stable)' if stable else ''
         html += f'<li><a href="/{repository}/{page}">{version}{extra}</a></li>'
         version_path = doc_path / version
-        if not version_path.exists() or (version == 'latest' and ref_name == 'main'):
+        build_main = version == 'latest' and ref_name in ('main', 'master')
+        if not version_path.exists() or build_main:
             git('reset', '--hard', ref_name)
             venv('pip', 'install', '.[doc]')
             options = ['--define', 'html_js_files=../../versions_list.js']
