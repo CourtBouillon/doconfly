@@ -65,7 +65,7 @@ def app(environ, start_response):
         version_path = doc_path / version
         build_main = version == 'latest' and ref_name in ('main', 'master')
         if not version_path.exists() or build_main:
-            git('reset', '--hard', f'origin/{ref_name}' if build_main else ref_name)
+            git('switch', '--detach', f'origin/{ref_name}' if build_main else ref_name)
             venv('pip', 'install', '.[doc]')
             options = ['--define', 'html_js_files=../../versions_list.js']
             if ref_name == 'main':
