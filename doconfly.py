@@ -66,14 +66,15 @@ def app(environ, start_response):
         versions += 1
         stable = not stable_version and not any(
             string in version for string in ('latest', 'a', 'b', 'rc'))
-        if stable:
-            stable_version = version
         page = 'stable' if stable else version
         extra = ' (main)' if version == 'latest' else ' (stable)' if stable else ''
         html += f'<li><a href="/{repository}/{page}">{version}{extra}</a></li>'
         version_path = doc_path / version
         if not version_path.exists() or (version == 'latest' and ref_name == 'main'):
             generate_doc(version_path, ref_name, version)
+        if stable:
+            stable_version = version
+            (doc_path / 'stable').symlink_to(version_path)
         if versions == 5:
             break
         last_minor = minor
