@@ -68,7 +68,7 @@ def app(environ, start_response):
             git('switch', '--detach', f'origin/{ref_name}' if build_main else ref_name)
             venv('pip', 'install', '.[doc]')
             options = ['--define', 'html_js_files=../../versions_list.js']
-            if ref_name == 'main':
+            if build_main:
                 options.extend(('--define', 'release='))
             venv('sphinx-build', 'docs', version_path, *options)
         if stable:
