@@ -17,7 +17,7 @@ window.onload = function(){
 
 def git(*args):
     stdout = run(('git', *args), stdout=PIPE, check=True).stdout
-    return stdout.decode().strip().split('\n')
+    return stdout.decode().strip().split('\n') if stdout else ()
 
 
 def venv(*args):
@@ -51,13 +51,13 @@ def app(environ, start_response):
     last_minor = None
     versions = 0
     html = ''
-    stable_version = None
+    stable_path = None
     for version in ('latest', *git('tag', '--sort=-v:refname')):
         minor = version.split('.')[1] if '.' in version else version
         if minor == last_minor:
             continue
         versions += 1
-        stable = not stable_version and not any(
+        stable = not stable_path and not any(
             string in version for string in ('latest', 'a', 'b', 'rc'))
         page = 'stable' if stable else version
         extra = ' (main)' if version == 'latest' else ' (stable)' if stable else ''
@@ -72,15 +72,15 @@ def app(environ, start_response):
                 options.extend(('--define', 'release='))
             venv('sphinx-build', 'docs', version_path, *options)
         if stable:
-            stable_version = version
-            stable_link = doc_path / 'stable'
-            if stable_link.exists():
-                stable_link.unlink()
-            stable_link.symlink_to(version_path)
+            stable_path = version_path
         if versions == 5:
             break
         last_minor = minor
     Path(doc_path / 'versions_list.js').write_text(JS % html)
+    stable_link = doc_path / 'stable'
+    if stable_link.exists():
+        stable_link.unlink()
+    stable_link.symlink_to(stable_path or 'latest')
 
     # Send HTTP response.
     start_response('200 OK', [('Content-Type', 'text/plain')])
