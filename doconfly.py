@@ -54,14 +54,14 @@ def app(environ, start_response):
         run(('python3', '-m', 'venv', venv), check=True)
     run(('.venv/bin/pip', 'install', '--upgrade', 'pip'), check=True)
 
-    # Create JavaScript file adding latest major versions in menu.
-    last_major = None
+    # Create JavaScript file adding latest minor versions in menu.
+    last_minor = None
     versions = 0
     html = ''
     stable_version = None
     for version in ('latest', *git('tag', '--sort=-v:refname')):
-        major = version.lstrip('0.').split('.')[0]
-        if major == last_major:
+        minor = version.split('.')[1] if '.' in version else version
+        if minor == last_minor:
             continue
         versions += 1
         stable = not stable_version and not any(
@@ -76,7 +76,7 @@ def app(environ, start_response):
             generate_doc(version_path, ref_name, version)
         if versions == 5:
             break
-        last_major = major
+        last_minor = minor
     Path(doc_path / 'versions_list.js').write_text(JS % html)
 
     # Send HTTP response.
