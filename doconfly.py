@@ -66,9 +66,9 @@ def app(environ, start_response):
         if not version_path.exists() or (version == 'latest' and ref_name == 'main'):
             git('reset', '--hard', ref_name)
             venv('pip', 'install', '.[doc]')
-            options = ['--define', 'html_js_files=/versions_list.js']
+            options = ['--define', 'html_js_files=../../versions_list.js']
             if ref_name == 'main':
-                options.extend(('--define', 'version=latest'))
+                options.extend(('--define', 'release='))
             venv('sphinx-build', 'docs', version_path, *options)
         if stable:
             stable_version = version
