@@ -74,7 +74,10 @@ def app(environ, start_response):
             generate_doc(version_path, ref_name, version)
         if stable:
             stable_version = version
-            (doc_path / 'stable').symlink_to(version_path)
+            stable_link = doc_path / 'stable'
+            if stable_link.exists():
+                stable_link.unlink()
+            stable_link.symlink_to(version_path)
         if versions == 5:
             break
         last_minor = minor
