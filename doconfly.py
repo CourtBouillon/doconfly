@@ -1,7 +1,6 @@
 from os import chdir, getenv
 from pathlib import Path
 from subprocess import PIPE, run
-from venv import EnvBuilder
 
 ROOT = Path(getenv('DOCONFLY_DOC_ROOT'))
 JS = """
@@ -50,7 +49,9 @@ def app(environ, start_response):
     # Fetch changes and create virtual environment.
     chdir(repository_path)
     git('fetch')
-    EnvBuilder(with_pip=True).create('.venv')
+    venv = Path('.venv')
+    if not venv.exists():
+        run(('python3', '-m', 'venv', venv), check=True)
     run(('.venv/bin/pip', 'install', '--upgrade', 'pip'), check=True)
 
     # Create JavaScript file adding latest major versions in menu.
