@@ -116,16 +116,6 @@ build_doc_versions() {
     done
 }
 
-make_directory() {
-    if [ ! -d "$documentation/$project_name" ]
-    then
-        \cd "$documentation"
-        \mkdir "$project_name"
-        \cd "$project_name"
-        \git clone "https://github.com:$github_repository.git" "$project_name"
-    fi
-}
-
 main() {
     \cd $project_clone
     \git fetch
@@ -155,7 +145,5 @@ documentation=$3
 github_repository=$1
 project_path="$documentation/$project_name"
 project_clone="$project_path/$project_name"
-
-make_directory $project_name
 
 main
