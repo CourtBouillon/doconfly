@@ -63,11 +63,13 @@ def app(environ, start_response):
         extra = ' (main)' if version == 'latest' else ' (stable)' if stable else ''
         html += f'<li><a href="/{repository}/{page}">{version}{extra}</a></li>'
         version_path = doc_path / version
-        if not version_path.exists() or (version == 'latest' and ref_name == 'main'):
+        if not version_path.exists() or ref_name == 'main':
             git('reset', '--hard', ref_name)
             venv('pip', 'install', '.[doc]')
-            js = 'html_js_files=/versions_list.js'
-            venv('sphinx-build', 'docs', version_path, '--define', js)
+            options = ['--define', 'html_js_files=/versions_list.js']
+            if ref_name == 'main':
+                options.extend(('--define', 'version=latest'))
+            venv('sphinx-build', 'docs', version_path, *options)
         if stable:
             stable_version = version
             stable_link = doc_path / 'stable'
